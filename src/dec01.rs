@@ -15,8 +15,6 @@ pub fn dec01a() {
 
     left_ids.sort();
     right_ids.sort();
-    println!("{}", left_ids.first().unwrap());
-    println!("{}", left_ids.last().unwrap());
 
     let mut sum = 0;
 
