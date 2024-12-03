@@ -21,7 +21,7 @@ fn main() {
 fn execute_functions(fns: Vec<fn()>) {
     let mut now = Instant::now();
     for (index, function) in fns.iter().enumerate() {
-        println!("december {}, part {}", index/2+1, index%2 + 1);
+        println!("december {}, part {}", index/2+1, index%2+1);
         function();
         println!("executed in {:?}\n", now.elapsed());
         now = Instant::now();
