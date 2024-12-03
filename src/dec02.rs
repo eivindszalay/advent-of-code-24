@@ -4,7 +4,7 @@ pub fn dec02a() {
 
     let mut sum = 0;
 
-    for line in read_to_string("src/dec02a.in").unwrap().lines() {
+    for line in read_to_string("src/in/dec02.in").unwrap().lines() {
         let levels: Vec<i32> = line.split(" ").map(|level| level.parse().unwrap()).collect();
 
         if safe(&levels) {
@@ -20,7 +20,7 @@ pub fn dec02b() {
 
     let mut sum = 0;
 
-    for line in read_to_string("src/dec02a.in").unwrap().lines() {
+    for line in read_to_string("src/in/dec02.in").unwrap().lines() {
         let mut levels: Vec<i32> = line.split(" ").map(|level| level.parse().unwrap()).collect();
 
         if safe(&levels) {

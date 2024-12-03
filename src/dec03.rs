@@ -2,7 +2,7 @@ use std::fs::read_to_string;
 use regex::Regex;
 
 pub fn dec03a() {
-    let memory = read_to_string("src/dec03.in").unwrap();
+    let memory = read_to_string("src/in/dec03.in").unwrap();
 
     let outer_re = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").unwrap();
     let inner_re = Regex::new(r"\d{1,3}").unwrap();
@@ -21,7 +21,7 @@ pub fn dec03a() {
 }
 
 pub fn dec03b() {
-    let memory = read_to_string("src/dec03.in").unwrap();
+    let memory = read_to_string("src/in/dec03.in").unwrap();
     let outer_re = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)").unwrap();
     let inner_re = Regex::new(r"\d{1,3}").unwrap();
     let mut sum = 0;

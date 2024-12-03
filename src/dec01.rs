@@ -7,7 +7,7 @@ pub fn dec01a() {
     let mut left_ids: Vec<u32> = Vec::new(); 
     let mut right_ids: Vec<u32> = Vec::new(); 
     
-    for line in read_to_string("src/dec01a.in").unwrap().lines() {
+    for line in read_to_string("src/in/dec01.in").unwrap().lines() {
         let ids: Vec<&str> = line.split_whitespace().collect();
         left_ids.push(ids[0].parse::<u32>().unwrap());
         right_ids.push(ids[1].parse::<u32>().unwrap());
@@ -30,7 +30,7 @@ pub fn dec01b() {
     let mut left_ids: Vec<u32> = Vec::new(); 
     let mut right_ids: Vec<u32> = Vec::new(); 
     
-    for line in read_to_string("src/dec01a.in").unwrap().lines() {
+    for line in read_to_string("src/in/dec01.in").unwrap().lines() {
         let ids: Vec<&str> = line.split_whitespace().collect();
         left_ids.push(ids[0].parse::<u32>().unwrap());
         right_ids.push(ids[1].parse::<u32>().unwrap());
