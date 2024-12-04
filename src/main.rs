@@ -15,19 +15,18 @@ fn main() {
         dec02::dec02b, 
         dec03::dec03a,
         dec03::dec03b,
+        dec04::dec04a,
+        dec04b::dec04b
         ].to_vec();
         
-    dec04::dec04a();
-    dec04b::dec04b();
-    // execute_functions(functions);
+    execute_functions(functions);
 }
 
 fn execute_functions(fns: Vec<fn()>) {
-    let mut now = Instant::now();
     for (index, function) in fns.iter().enumerate() {
         println!("december {}, part {}", index/2+1, index%2+1);
+        let now = Instant::now();
         function();
         println!("executed in {:?}\n", now.elapsed());
-        now = Instant::now();
     }
 }
