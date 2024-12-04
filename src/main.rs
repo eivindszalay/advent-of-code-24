@@ -3,6 +3,8 @@ use std::time::Instant;
 mod dec01;
 mod dec02;
 mod dec03;
+mod dec04;
+mod dec04b;
 
 fn main() {
     
@@ -12,10 +14,12 @@ fn main() {
         dec02::dec02a,
         dec02::dec02b, 
         dec03::dec03a,
-        dec03::dec03b
-    ].to_vec();
-    
-    execute_functions(functions);
+        dec03::dec03b,
+        ].to_vec();
+        
+    dec04::dec04a();
+    dec04b::dec04b();
+    // execute_functions(functions);
 }
 
 fn execute_functions(fns: Vec<fn()>) {
