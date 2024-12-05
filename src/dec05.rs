@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, fs::read_to_string, io::Error};
+use std::{cmp::Ordering, collections::HashSet, fs::read_to_string};
 
 type Rule = (usize, usize);
 
@@ -32,13 +32,13 @@ pub fn dec05b() {
     println!("{}", sum);
 }
 
-fn fix_update(update: Vec<usize>, rules: &Vec<Rule>) -> usize {
+fn fix_update(update: Vec<usize>, rules: &HashSet<Rule>) -> usize {
     let mut sorted = update.clone();
     sorted.sort_by(|p1, p2| compare(*p1, *p2, rules));
     sorted[sorted.len()/2]
 }
 
-fn compare(p1: usize, p2: usize, rules: &Vec<Rule>) -> Ordering {
+fn compare(p1: usize, p2: usize, rules: &HashSet<Rule>) -> Ordering {
     if rules.contains(&(p1, p2)) {
         return Ordering::Less;
     } else if rules.contains(&(p2, p1)) {
@@ -47,7 +47,7 @@ fn compare(p1: usize, p2: usize, rules: &Vec<Rule>) -> Ordering {
     return Ordering::Equal;
 }
 
-fn is_correct(update: &Vec<usize>, rules: &Vec<Rule>) -> bool {
+fn is_correct(update: &Vec<usize>, rules: &HashSet<Rule>) -> bool {
     let mut correct = true; 
     for i in 0..update.len() {
         for j in i..update.len() {
@@ -57,11 +57,11 @@ fn is_correct(update: &Vec<usize>, rules: &Vec<Rule>) -> bool {
     correct
 }
 
-fn get_input() -> (Vec<Rule>, Vec<Vec<usize>>) {
+fn get_input() -> (HashSet<Rule>, Vec<Vec<usize>>) {
     let input = read_to_string("src/in/dec05.in");
     match input {
         Ok(i) => {
-            let rules: Vec<Rule> = i
+            let rules: HashSet<Rule> = i
             .split("\n\n")
             .nth(0)
             .unwrap()
