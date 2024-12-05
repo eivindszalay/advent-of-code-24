@@ -1,10 +1,11 @@
-use std::{cmp::Ordering, fs::read_to_string};
+use std::{cmp::Ordering, fs::read_to_string, io::Error};
 
 type Rule = (usize, usize);
 
 /// correct answer is 5747
 pub fn dec05a() {
     let (rules, updates) = get_input();
+
     let mut sum = 0;
 
     for update in updates {
@@ -57,23 +58,28 @@ fn is_correct(update: &Vec<usize>, rules: &Vec<Rule>) -> bool {
 }
 
 fn get_input() -> (Vec<Rule>, Vec<Vec<usize>>) {
-    let input = read_to_string("src/in/dec05.in").unwrap();
-    let rules: Vec<Rule> = input
-        .split("\n\n")
-        .nth(0)
-        .unwrap()
-        .lines()
-        .map(|rule| parse_as_rule(rule))
-        .collect();
+    let input = read_to_string("src/in/dec05.in");
+    match input {
+        Ok(i) => {
+            let rules: Vec<Rule> = i
+            .split("\n\n")
+            .nth(0)
+            .unwrap()
+            .lines()
+            .map(|rule| parse_as_rule(rule))
+            .collect();
 
-    let updates: Vec<Vec<usize>> = input
-        .split("\n\n")
-        .nth(1)
-        .unwrap()
-        .lines()
-        .map(|line| parse_as_update(line))
-        .collect();
-    (rules, updates)
+            let updates: Vec<Vec<usize>> = i
+                .split("\n\n")
+                .nth(1)
+                .unwrap()
+                .lines()
+                .map(|line| parse_as_update(line))
+                .collect();
+            return (rules, updates);
+        },
+        Err(e) => panic!("{}", e),
+    }
 }
 
 fn parse_as_rule(rule: &str) -> Rule {

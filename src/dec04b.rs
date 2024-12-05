@@ -70,13 +70,6 @@ fn check_for_char(c: char, starting_point: Point, dir: Direction, input: &Vec<St
     }
 }
 
-fn next_char(c: char) -> char {
-    if c== 'X' { return 'M'; }
-    if c== 'M' { return 'A'; }
-    if c== 'A' { return 'S'; }
-    return 'Å';
-}
-
 
 fn next_point(dir: &Direction, (x, y): Point, w:usize, h:usize) -> Result<Point, OutOfBoundsError> {
     let new_point = match dir {
