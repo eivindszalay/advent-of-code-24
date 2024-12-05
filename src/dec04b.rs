@@ -1,13 +1,9 @@
 use std::{fmt, fs::read_to_string};
 
 enum Direction {
-    N,
     NE,
-    E,
     SE,
-    S,
     SW,
-    W,
     NW
 }
 
@@ -84,13 +80,9 @@ fn next_char(c: char) -> char {
 
 fn next_point(dir: &Direction, (x, y): Point, w:usize, h:usize) -> Result<Point, OutOfBoundsError> {
     let new_point = match dir {
-        Direction::N => (Some(x), y.checked_sub(1)), 
         Direction::NE => (Some(x+1), y.checked_sub(1)),
-        Direction::E => (Some(x+1), Some(y)),
         Direction::SE => (Some(x+1), Some(y+1)),
-        Direction::S => (Some(x), Some(y+1)),
         Direction::SW => (x.checked_sub(1), Some(y+1)),
-        Direction::W => (x.checked_sub(1), Some(y)),
         Direction::NW => (x.checked_sub(1), y.checked_sub(1)),
     };
 

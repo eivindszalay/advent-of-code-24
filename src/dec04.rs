@@ -37,7 +37,6 @@ pub fn dec04a() {
         for i in  0..width {
             let char = line_chars[i];
             if char=='X' {
-                let east = check_for_xmas((i, j), Direction::E, &input);
                 if check_for_xmas((i, j), Direction::N, &input) {sum += 1;}
                 if check_for_xmas((i, j), Direction::NE, &input) {sum += 1;}
                 if check_for_xmas((i, j), Direction::E, &input) {sum += 1;}

@@ -1,10 +1,11 @@
-#[allow(dead_code)]
+#[allow(dead_code, unused_variables)]
 use std::time::Instant;
 mod dec01;
 mod dec02;
 mod dec03;
 mod dec04;
 mod dec04b;
+mod dec05;
 
 fn main() {
     
@@ -16,9 +17,11 @@ fn main() {
         dec03::dec03a,
         dec03::dec03b,
         dec04::dec04a,
-        dec04b::dec04b
+        dec04b::dec04b,
+        dec05::dec05a,
+        dec05::dec05b
         ].to_vec();
-        
+    
     execute_functions(functions);
 }
 
