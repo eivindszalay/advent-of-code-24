@@ -25,11 +25,13 @@ fn main() {
     execute_functions(functions);
 }
 
-fn execute_functions(fns: Vec<fn()>) {
+fn execute_functions(fns: Vec<fn() -> u32>) {
+    let before = Instant::now();
     for (index, function) in fns.iter().enumerate() {
         println!("december {}, part {}", index/2+1, index%2+1);
         let now = Instant::now();
-        function();
-        println!("executed in {:?}\n", now.elapsed());
+        let solution = function();
+        println!("executed in {:?}, solution is {}\n", now.elapsed(), solution);
     }
+    println!("total execution time was {:?}", before.elapsed())
 }

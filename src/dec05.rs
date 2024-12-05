@@ -1,9 +1,9 @@
 use std::{cmp::Ordering, collections::HashSet, fs::read_to_string};
 
-type Rule = (usize, usize);
+type Rules = HashSet<(usize, usize)>;
 
 /// correct answer is 5747
-pub fn dec05a() {
+pub fn dec05a() -> u32 {
     let (rules, updates) = get_input();
 
     let mut sum = 0;
@@ -15,11 +15,11 @@ pub fn dec05a() {
         }
     }
 
-    println!("{}", sum);
+    return sum.try_into().unwrap();
 }
 
 /// correct answer is 5502
-pub fn dec05b() {
+pub fn dec05b() -> u32 {
     let (rules, updates) = get_input();
     let mut sum = 0;
     for update in updates {
@@ -29,16 +29,16 @@ pub fn dec05b() {
         }
     }
 
-    println!("{}", sum);
+    return sum.try_into().unwrap();
 }
 
-fn fix_update(update: Vec<usize>, rules: &HashSet<Rule>) -> usize {
+fn fix_update(update: Vec<usize>, rules: &Rules) -> usize {
     let mut sorted = update.clone();
     sorted.sort_by(|p1, p2| compare(*p1, *p2, rules));
     sorted[sorted.len()/2]
 }
 
-fn compare(p1: usize, p2: usize, rules: &HashSet<Rule>) -> Ordering {
+fn compare(p1: usize, p2: usize, rules: &Rules) -> Ordering {
     if rules.contains(&(p1, p2)) {
         return Ordering::Less;
     } else if rules.contains(&(p2, p1)) {
@@ -47,7 +47,7 @@ fn compare(p1: usize, p2: usize, rules: &HashSet<Rule>) -> Ordering {
     return Ordering::Equal;
 }
 
-fn is_correct(update: &Vec<usize>, rules: &HashSet<Rule>) -> bool {
+fn is_correct(update: &Vec<usize>, rules: &Rules) -> bool {
     let mut correct = true; 
     for i in 0..update.len() {
         for j in i..update.len() {
@@ -57,11 +57,11 @@ fn is_correct(update: &Vec<usize>, rules: &HashSet<Rule>) -> bool {
     correct
 }
 
-fn get_input() -> (HashSet<Rule>, Vec<Vec<usize>>) {
+fn get_input() -> (Rules, Vec<Vec<usize>>) {
     let input = read_to_string("src/in/dec05.in");
     match input {
         Ok(i) => {
-            let rules: HashSet<Rule> = i
+            let rules = i
             .split("\n\n")
             .nth(0)
             .unwrap()
@@ -82,7 +82,7 @@ fn get_input() -> (HashSet<Rule>, Vec<Vec<usize>>) {
     }
 }
 
-fn parse_as_rule(rule: &str) -> Rule {
+fn parse_as_rule(rule: &str) -> (usize, usize) {
     let pages: Vec<&str> = rule.split("|").collect();
     let left = pages[0].parse::<usize>().unwrap();
     let right = pages[1].parse::<usize>().unwrap();

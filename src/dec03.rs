@@ -1,7 +1,7 @@
 use std::fs::read_to_string;
 use regex::Regex;
 
-pub fn dec03a() {
+pub fn dec03a() -> u32 {
     let memory = read_to_string("src/in/dec03.in").unwrap();
 
     let outer_re = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").unwrap();
@@ -17,10 +17,10 @@ pub fn dec03a() {
         sum += i_factors[0]*i_factors[1];
     }
 
-    println!("{}", sum);
+    return sum.try_into().unwrap();
 }
 
-pub fn dec03b() {
+pub fn dec03b() -> u32 {
     let memory = read_to_string("src/in/dec03.in").unwrap();
     let outer_re = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)").unwrap();
     let inner_re = Regex::new(r"\d{1,3}").unwrap();
@@ -46,5 +46,5 @@ pub fn dec03b() {
         sum += i_factors[0]*i_factors[1];
     }
 
-    println!("{}", sum);
+    return sum.try_into().unwrap();
 }

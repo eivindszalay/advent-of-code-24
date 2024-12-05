@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 
 
-pub fn dec01a() {
+pub fn dec01a() -> u32 {
     let mut left_ids: Vec<u32> = Vec::new(); 
     let mut right_ids: Vec<u32> = Vec::new(); 
     
@@ -21,12 +21,12 @@ pub fn dec01a() {
     for (index, id) in left_ids.iter().enumerate() {
         sum += id.abs_diff(right_ids[index]);
     }
-
-    println!("{}", sum);
+    
+    return sum;
 }
 
 
-pub fn dec01b() {
+pub fn dec01b() -> u32{
     let mut left_ids: Vec<u32> = Vec::new(); 
     let mut right_ids: Vec<u32> = Vec::new(); 
     
@@ -57,6 +57,5 @@ pub fn dec01b() {
         }
     }
 
-    println!("{}", sum);
-    
+    return sum;
 }

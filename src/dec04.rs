@@ -22,7 +22,7 @@ impl fmt::Debug for OutOfBoundsError {
     }
 }
 
-pub fn dec04a() {
+pub fn dec04a() -> u32 {
 
     let input: Vec<String> = read_to_string("src/in/dec04.in")
         .unwrap()
@@ -48,9 +48,7 @@ pub fn dec04a() {
             }
         }
     }
-    println!("{}", sum);
-
-    
+    return sum;    
 }
 
 fn check_for_xmas(starting_point: Point, dir: Direction, input: &Vec<String>) -> bool {

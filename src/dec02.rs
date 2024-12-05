@@ -1,6 +1,6 @@
 use std::fs::read_to_string;
 
-pub fn dec02a() {
+pub fn dec02a() -> u32 {
 
     let mut sum = 0;
 
@@ -13,10 +13,10 @@ pub fn dec02a() {
 
     }
 
-    println!("{}", sum);
+    return sum;
 }
 
-pub fn dec02b() {
+pub fn dec02b() -> u32 {
 
     let mut sum = 0;
 
@@ -42,7 +42,7 @@ pub fn dec02b() {
         }
     }
 
-    println!("{}", sum);
+    return sum;
 }
 
 fn safe(levels: &Vec<i32>) -> bool {
