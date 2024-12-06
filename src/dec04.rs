@@ -22,7 +22,7 @@ impl fmt::Debug for OutOfBoundsError {
     }
 }
 
-pub fn dec04a() -> u32 {
+pub fn part1() -> u32 {
 
     let input: Vec<String> = read_to_string("src/in/dec04.in")
         .unwrap()

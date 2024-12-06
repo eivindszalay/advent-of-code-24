@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 
 
-pub fn dec01a() -> u32 {
+pub fn part1() -> u32 {
     let mut left_ids: Vec<u32> = Vec::new(); 
     let mut right_ids: Vec<u32> = Vec::new(); 
     
@@ -26,7 +26,7 @@ pub fn dec01a() -> u32 {
 }
 
 
-pub fn dec01b() -> u32{
+pub fn part2() -> u32{
     let mut left_ids: Vec<u32> = Vec::new(); 
     let mut right_ids: Vec<u32> = Vec::new(); 
     

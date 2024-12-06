@@ -3,7 +3,7 @@ use std::{cmp::Ordering, collections::HashSet, fs::read_to_string};
 type Rules = HashSet<(usize, usize)>;
 
 /// correct answer is 5747
-pub fn dec05a() -> u32 {
+pub fn part1() -> u32 {
     let (rules, updates) = get_input();
 
     let mut sum = 0;
@@ -19,7 +19,7 @@ pub fn dec05a() -> u32 {
 }
 
 /// correct answer is 5502
-pub fn dec05b() -> u32 {
+pub fn part2() -> u32 {
     let (rules, updates) = get_input();
     let mut sum = 0;
     for update in updates {

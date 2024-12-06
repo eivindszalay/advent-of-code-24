@@ -11,16 +11,16 @@ mod dec06;
 fn main() {
     
     let functions = [
-        dec01::dec01a,
-        dec01::dec01b, 
-        dec02::dec02a,
-        dec02::dec02b, 
-        dec03::dec03a,
-        dec03::dec03b,
-        dec04::dec04a,
-        dec04b::dec04b,
-        dec05::dec05a,
-        dec05::dec05b,
+        dec01::part1,
+        dec01::part2, 
+        dec02::part1,
+        dec02::part2, 
+        dec03::part1,
+        dec03::part2,
+        dec04::part1,
+        dec04b::part2,
+        dec05::part1,
+        dec05::part2,
         dec06::part1,
         dec06::part2
         ].to_vec();

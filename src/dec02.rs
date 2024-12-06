@@ -1,6 +1,6 @@
 use std::fs::read_to_string;
 
-pub fn dec02a() -> u32 {
+pub fn part1() -> u32 {
 
     let mut sum = 0;
 
@@ -16,7 +16,7 @@ pub fn dec02a() -> u32 {
     return sum;
 }
 
-pub fn dec02b() -> u32 {
+pub fn part2() -> u32 {
 
     let mut sum = 0;
 
