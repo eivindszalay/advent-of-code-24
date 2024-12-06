@@ -22,6 +22,7 @@ impl fmt::Debug for OutOfBoundsError {
     }
 }
 
+/// correct answer is 2406
 pub fn part1() -> u32 {
 
     let input: Vec<String> = read_to_string("src/in/dec04.in")
@@ -33,7 +34,7 @@ pub fn part1() -> u32 {
     let height = input[0].len();
     let mut sum = 0;
     for j in 0..height {
-        let line_chars: Vec<char> = input[j].chars().collect(); // Collect the chars once
+        let line_chars: Vec<char> = input[j].chars().collect();
         for i in  0..width {
             let char = line_chars[i];
             if char=='X' {
@@ -73,6 +74,61 @@ fn check_for_xmas(starting_point: Point, dir: Direction, input: &Vec<String>) ->
         }
     }
 }
+
+/// correct answer is 1807
+pub fn part2() -> u32 {
+
+    let input: Vec<String> = read_to_string("src/in/dec04.in")
+        .unwrap()
+        .lines()
+        .map(str::to_string)
+        .collect();
+    let width = input.len();
+    let height = input[0].len();
+    let mut sum = 0;
+    for j in 0..height {
+        let line_chars: Vec<char> = input[j].chars().collect();
+        for i in  0..width {
+            let char = line_chars[i];
+            if char=='A' {
+                let slash = (check_for_char('M', (i, j), Direction::NW, &input) 
+                    && check_for_char('S', (i, j), Direction::SE, &input))
+                    || (check_for_char('M', (i, j), Direction::SE, &input) 
+                    && check_for_char('S', (i, j), Direction::NW, &input));
+
+                let backslash = (check_for_char('M', (i, j), Direction::NE, &input) 
+                && check_for_char('S', (i, j), Direction::SW, &input))
+                || (check_for_char('M', (i, j), Direction::SW, &input) 
+                && check_for_char('S', (i, j), Direction::NE, &input));
+
+                if slash && backslash {sum += 1;}
+
+            }
+        }
+    }
+    return sum;
+
+    
+}
+
+fn check_for_char(c: char, starting_point: Point, dir: Direction, input: &Vec<String>) -> bool {
+    let width = input.len();
+    let height = input[0].len();
+    let ( current_x,  current_y) = starting_point;
+    if let Ok((x, y)) = next_point(&dir, (current_x, current_y), width, height) {
+        let line = input.get(y).unwrap();
+        let char = line.chars().nth(x).unwrap();
+        if char==c {
+                return true; 
+        } else { 
+            return false 
+        }
+    } else {
+        return false;
+    }
+}
+
+
 
 fn next_char(c: char) -> char {
     if c== 'X' { return 'M'; }

@@ -54,21 +54,21 @@ pub fn part2() -> u32 {
     let map: Vec<&str> = input
         .lines()
         .collect();
-    let (mut x, mut y) = get_starting_pos(&map);
+    let mut pos = get_starting_pos(&map);
 
     
-    let mut visited_pos: HashSet<(usize, usize)> = HashSet::new();
+    let mut path: HashSet<(usize, usize)> = HashSet::new();
 
-    visited_pos.insert((x, y));
+    path.insert(pos);
 
     let mut dir = Direction::UP;
 
     loop {
         let new_pos_result = match dir  {
-            Direction::UP => move_up((x, y)),
-            Direction::RIGHT => move_right((x, y), map[0].len()),
-            Direction::DOWN => move_down((x, y), map.len()),
-            Direction::LEFT => move_left((x, y)),
+            Direction::UP => move_up(pos),
+            Direction::RIGHT => move_right(pos, map[0].len()),
+            Direction::DOWN => move_down(pos, map.len()),
+            Direction::LEFT => move_left(pos),
         };
         if let Ok((new_x, new_y)) = new_pos_result {
             if map[new_y].chars().nth(new_x).unwrap()=='#' {
@@ -79,23 +79,22 @@ pub fn part2() -> u32 {
                     Direction::LEFT => Direction::UP,
                 }
             } else {
-                x = new_x;
-                y = new_y;
-                visited_pos.insert((new_x, new_y));
+                pos = (new_x, new_y);
+                path.insert((new_x, new_y));
             }
         } else {
             break;
         }
     }
     
-    let (x, y) = get_starting_pos(&map);
+    let pos = get_starting_pos(&map);
 
 
     let mut sum = 0;
 
-    for (visited_x, visited_y) in visited_pos {
-        if (visited_x, visited_y) != (x, y) {
-            if has_loop((x, y), &map, (visited_x,visited_y)) {
+    for (visited_x, visited_y) in path {
+        if (visited_x, visited_y) != pos {
+            if has_loop(pos, &map, (visited_x,visited_y)) {
                 sum += 1;
             }
         }

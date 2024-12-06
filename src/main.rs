@@ -4,7 +4,6 @@ mod dec01;
 mod dec02;
 mod dec03;
 mod dec04;
-mod dec04b;
 mod dec05;
 mod dec06;
 
@@ -18,7 +17,7 @@ fn main() {
         dec03::part1,
         dec03::part2,
         dec04::part1,
-        dec04b::part2,
+        dec04::part2,
         dec05::part1,
         dec05::part2,
         dec06::part1,
