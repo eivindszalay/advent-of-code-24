@@ -6,6 +6,7 @@ mod dec03;
 mod dec04;
 mod dec04b;
 mod dec05;
+mod dec06;
 
 fn main() {
     
@@ -19,7 +20,9 @@ fn main() {
         dec04::dec04a,
         dec04b::dec04b,
         dec05::dec05a,
-        dec05::dec05b
+        dec05::dec05b,
+        dec06::part1,
+        dec06::part2
         ].to_vec();
     
     execute_functions(functions);
