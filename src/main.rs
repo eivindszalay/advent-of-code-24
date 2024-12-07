@@ -29,27 +29,23 @@ fn main() {
 
     let args: Vec<String> = args().collect();
     let day_arg_opt = args.get(1);
-    let mut day_opt: Option<usize> = None;
-    if let Some(d) = day_arg_opt {
-        let parsed_arg_result = d.parse::<usize>();
-        if let Ok(day) = parsed_arg_result {
+    let mut day_opt = None;
+    if let Some(day_arg) = day_arg_opt {
+        let day_arg_res = day_arg.parse();
+        if let Ok(day) = day_arg_res {
             if 0<day && day<=functions.len()/2 {
                 day_opt = Some(day)
             }
         }
     }
 
-    execute_functions(functions, day_opt);
-}
-
-fn execute_functions(fns: Vec<fn() -> usize>, day: Option<usize>) {
     let before = Instant::now();
-    if let Some(d) = day {
-        execute_function(fns[(d-1)*2], d, 1);
-        execute_function(fns[(d-1)*2+1], d, 2);
+    if let Some(d) = day_opt {
+        execute_function(functions[(d-1)*2], d, 1);
+        execute_function(functions[(d-1)*2+1], d, 2);
     } else {
-        for (index, function) in fns.iter().enumerate() {
-            execute_function(*function, index/2+1, index%2+1);
+        for (index, fun) in functions.iter().enumerate() {
+            execute_function(*fun, index/2+1, index%2+1);
         }
     }
     println!("total execution time was {:?}", before.elapsed())
