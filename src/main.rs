@@ -1,5 +1,5 @@
 #[allow(dead_code, unused_variables)]
-use std::time::Instant;
+use std::{time::Instant, env::args};
 mod dec01;
 mod dec02;
 mod dec03;
@@ -10,7 +10,7 @@ mod dec07;
 
 fn main() {
     
-    let functions: Vec<fn() -> usize> = [
+    let functions = [
         dec01::part1,
         dec01::part2, 
         dec02::part1,
@@ -26,17 +26,38 @@ fn main() {
         dec07::part1,
         dec07::part2
         ].to_vec();
-    
-    execute_functions(functions);
+
+    let args: Vec<String> = args().collect();
+    let day_arg_opt = args.get(1);
+    let mut day_opt: Option<usize> = None;
+    if let Some(d) = day_arg_opt {
+        let parsed_arg_result = d.parse::<usize>();
+        if let Ok(day) = parsed_arg_result {
+            if 0<day && day<=functions.len()/2 {
+                day_opt = Some(day)
+            }
+        }
+    }
+
+    execute_functions(functions, day_opt);
 }
 
-fn execute_functions(fns: Vec<fn() -> usize>) {
+fn execute_functions(fns: Vec<fn() -> usize>, day: Option<usize>) {
     let before = Instant::now();
-    for (index, function) in fns.iter().enumerate() {
-        println!("december {}, part {}", index/2+1, index%2+1);
-        let now = Instant::now();
-        let solution = function();
-        println!("executed in {:?}, solution is {}\n", now.elapsed(), solution);
+    if let Some(d) = day {
+        execute_function(fns[(d-1)*2], d, 1);
+        execute_function(fns[(d-1)*2+1], d, 2);
+    } else {
+        for (index, function) in fns.iter().enumerate() {
+            execute_function(*function, index/2+1, index%2+1);
+        }
     }
     println!("total execution time was {:?}", before.elapsed())
+}
+
+fn execute_function(fun: fn() -> usize, day: usize, part: usize) {
+    println!("december {}, part {}", day, part);
+    let now = Instant::now();
+    let solution = fun();
+    println!("executed in {:?}, solution is {}\n", now.elapsed(), solution);
 }
