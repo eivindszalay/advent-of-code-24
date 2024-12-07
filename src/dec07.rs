@@ -14,7 +14,7 @@ pub fn part1() -> usize {
     let mut sum = 0;
 
     for (lh, rh) in eqs {
-        let results = calculate(rh[0], rh[1..].to_vec(), false);
+        let results = calculate(rh[0], rh[1..].to_vec(), false, lh);
         if results.contains(&lh) {
             sum += lh;
         }
@@ -29,7 +29,7 @@ pub fn part2() -> usize {
     let mut sum = 0;
 
     for (lh, rh) in eqs {
-        let results = calculate(rh[0], rh[1..].to_vec(), true);
+        let results = calculate(rh[0], rh[1..].to_vec(), true, lh);
         if results.contains(&lh) {
             sum += lh;
         }
@@ -38,16 +38,17 @@ pub fn part2() -> usize {
 }
 
 
-fn calculate(value: usize, parts: Vec<usize>, concat: bool) -> Vec<usize> {
-    if parts.len() == 0 { return vec!(value) };
+fn calculate(current_result: usize, parts: Vec<usize>, concat: bool, goal: usize) -> Vec<usize> {
+    if current_result > goal { return vec!() };
+    if parts.len() == 0 { return vec!(current_result) };
 
-    let mut add_result = calculate(value+parts[0], parts[1..].to_vec(), concat);
-    let mut mult_result = calculate(value*parts[0], parts[1..].to_vec(), concat);
+    let mut add_result = calculate(current_result+parts[0], parts[1..].to_vec(), concat, goal);
+    let mut mult_result = calculate(current_result*parts[0], parts[1..].to_vec(), concat, goal);
     add_result.append(&mut mult_result);
     if concat {
-        let mut foo: String = value.to_string();
-        foo.push_str(&parts[0].to_string());
-        let mut concat_result = calculate(foo.parse().unwrap(), parts[1..].to_vec(), concat);
+        let mut value_as_string: String = current_result.to_string();
+        value_as_string.push_str(&parts[0].to_string());
+        let mut concat_result = calculate(value_as_string.parse().unwrap(), parts[1..].to_vec(), concat, goal);
         add_result.append(&mut concat_result);
     }
     add_result
