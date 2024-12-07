@@ -6,6 +6,7 @@ mod dec03;
 mod dec04;
 mod dec05;
 mod dec06;
+mod dec07;
 
 fn main() {
     
@@ -24,7 +25,9 @@ fn main() {
         dec06::part2
         ].to_vec();
     
-    execute_functions(functions);
+    // execute_functions(functions);
+    println!("{}", dec07::part1());
+    println!("{}", dec07::part2());
 }
 
 fn execute_functions(fns: Vec<fn() -> u32>) {
