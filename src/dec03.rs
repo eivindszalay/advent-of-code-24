@@ -45,7 +45,12 @@ pub fn part2() -> usize {
             continue
         };
         let factors = inner_re.find_iter(m.into());
-        let i_factors: Vec<i32> = factors.map(|factor| factor.as_str().parse::<i32>().unwrap()).collect();
+        let i_factors: Vec<i32> = factors
+            .map(|factor| factor
+                .as_str()
+                .parse()
+                .unwrap())
+            .collect();
         
         sum += i_factors[0]*i_factors[1];
     }

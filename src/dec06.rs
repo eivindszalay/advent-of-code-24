@@ -1,4 +1,4 @@
-use std::{collections::HashSet, fs::read_to_string};
+use std::{collections::HashSet, fs::read_to_string, thread};
 
 #[derive(Eq, Hash, PartialEq)]
 enum Direction {
@@ -87,19 +87,63 @@ pub fn part2() -> usize {
         }
     }
     
-    let pos = get_starting_pos(&map);
+    let pos_1 = get_starting_pos(&map);
+    let pos_2 = pos_1.clone();
+    
+    
 
 
-    let mut sum = 0;
+    let path_array: Vec<(usize, usize)> = path.into_iter().collect();
 
-    for (visited_x, visited_y) in path {
-        if (visited_x, visited_y) != pos {
-            if has_loop(pos, &map, (visited_x,visited_y)) {
-                sum += 1;
+    // for (visited_x, visited_y) in path {
+    //     if (visited_x, visited_y) != pos {
+    //         if has_loop(pos, &map, (visited_x,visited_y)) {
+    //             sum += 1;
+    //         }
+    //     }
+    // }
+
+    let mid = path_array.len() / 2;
+    let (first_half, second_half) = path_array.split_at(mid);
+
+    let first_half = first_half.to_vec();
+    let second_half = second_half.to_vec();
+
+    let handle1 = thread::spawn(move || {
+        let input_1 = read_to_string("src/in/dec06.in").unwrap();
+        let map_1: Vec<&str> = input_1
+            .lines()
+            .collect();
+        let mut sum = 0;
+        for (visited_x, visited_y) in first_half {
+            if (visited_x, visited_y) != pos_1 {
+                if has_loop(pos_1, &map_1, (visited_x,visited_y)) {
+                    sum += 1;
+                }
             }
         }
-    }
-    sum
+        return sum;
+    });
+
+    let handle2 = thread::spawn(move || {
+        let input_2 = read_to_string("src/in/dec06.in").unwrap();
+        let map_2: Vec<&str> = input_2
+            .lines()
+            .collect();
+        let mut sum = 0;
+        for (visited_x, visited_y) in second_half {
+            if (visited_x, visited_y) != pos_2 {
+                if has_loop(pos_2, &map_2, (visited_x,visited_y)) {
+                    sum += 1;
+                }
+            }
+        }
+        return sum;
+    });
+    let sum_1 = handle1.join().unwrap();
+    let sum_2 = handle2.join().unwrap();
+
+    return sum_1+sum_2;
 }
 
 
