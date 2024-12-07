@@ -3,7 +3,8 @@ use std::collections::HashMap;
 
 
 
-pub fn part1() -> u32 {
+/// correct answer is 2815556
+pub fn part1() -> usize {
     let mut left_ids: Vec<u32> = Vec::new(); 
     let mut right_ids: Vec<u32> = Vec::new(); 
     
@@ -22,11 +23,11 @@ pub fn part1() -> u32 {
         sum += id.abs_diff(right_ids[index]);
     }
     
-    return sum;
+    return sum.try_into().unwrap();
 }
 
-
-pub fn part2() -> u32{
+/// correct answer is 23927637
+pub fn part2() -> usize {
     let mut left_ids: Vec<u32> = Vec::new(); 
     let mut right_ids: Vec<u32> = Vec::new(); 
     
@@ -57,5 +58,5 @@ pub fn part2() -> u32{
         }
     }
 
-    return sum;
+    return sum.try_into().unwrap();
 }

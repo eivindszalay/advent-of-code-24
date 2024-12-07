@@ -19,7 +19,7 @@ pub fn part1() -> usize {
             sum += lh;
         }
     }
-    return sum.try_into().unwrap();
+    return sum;
 }
 
 /// correct answer is 492383931650959
@@ -34,8 +34,7 @@ pub fn part2() -> usize {
             sum += lh;
         }
     }
-    println!("{}", sum);
-    return sum.try_into().unwrap();
+    return sum;
 }
 
 

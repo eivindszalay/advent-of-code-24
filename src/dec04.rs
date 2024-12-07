@@ -23,7 +23,7 @@ impl fmt::Debug for OutOfBoundsError {
 }
 
 /// correct answer is 2406
-pub fn part1() -> u32 {
+pub fn part1() -> usize {
 
     let input: Vec<String> = read_to_string("src/in/dec04.in")
         .unwrap()
@@ -76,7 +76,7 @@ fn check_for_xmas(starting_point: Point, dir: Direction, input: &Vec<String>) ->
 }
 
 /// correct answer is 1807
-pub fn part2() -> u32 {
+pub fn part2() -> usize {
 
     let input: Vec<String> = read_to_string("src/in/dec04.in")
         .unwrap()

@@ -9,7 +9,7 @@ enum Direction {
 }
 
 /// correct answer is 4789
-pub fn part1() -> u32 {
+pub fn part1() -> usize {
     let input = read_to_string("src/in/dec06.in").unwrap();
     let map: Vec<&str> = input
         .lines()
@@ -49,7 +49,7 @@ pub fn part1() -> u32 {
 }
 
 /// correct answer is 1304
-pub fn part2() -> u32 {
+pub fn part2() -> usize {
     let input = read_to_string("src/in/dec06.in").unwrap();
     let map: Vec<&str> = input
         .lines()

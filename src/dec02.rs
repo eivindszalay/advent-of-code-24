@@ -1,6 +1,8 @@
 use std::fs::read_to_string;
 
-pub fn part1() -> u32 {
+
+/// correct answer is 236
+pub fn part1() -> usize {
 
     let mut sum = 0;
 
@@ -13,10 +15,11 @@ pub fn part1() -> u32 {
 
     }
 
-    return sum;
+    return sum.try_into().unwrap();
 }
 
-pub fn part2() -> u32 {
+/// correct answer is 308
+pub fn part2() -> usize {
 
     let mut sum = 0;
 
@@ -42,7 +45,7 @@ pub fn part2() -> u32 {
         }
     }
 
-    return sum;
+    return sum.try_into().unwrap();
 }
 
 fn safe(levels: &Vec<i32>) -> bool {
