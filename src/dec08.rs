@@ -1,4 +1,4 @@
-use std::{cmp, collections::{HashMap, HashSet}, fs::read_to_string};
+use std::{collections::{HashMap, HashSet}, fs::read_to_string};
 
 /// correct answer is 273
 pub fn part1() -> usize {
@@ -6,292 +6,119 @@ pub fn part1() -> usize {
     let map: Vec<&str>  = input.lines().collect();
     let height = map.len();
     let length = map[0].len();
-    let mut antennas: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
+    let mut antennas: HashMap<char, Vec<(i32, i32)>> = HashMap::new();
     for y in 0..height {
         for x in 0..length {
             let c: char = map[y].chars().nth(x).unwrap();
             if c != '.' {
                 let seen = antennas.get_mut(&c);
                 if let Some(s) = seen {
-                    s.push((x, y));
+                    s.push((x.try_into().unwrap(), y.try_into().unwrap()));
                 } else {
-                    antennas.insert(c, vec!( (x, y)));
+                    antennas.insert(c, vec!((x.try_into().unwrap(), y.try_into().unwrap())));
                 }
             }
         }
     }
-    let mut antinodes: HashSet<(usize, usize)> = HashSet::new();
-    for (symbol, points) in antennas {
-        println!("{:?}", (symbol, &points));
-        for (i, (x1, y1)) in points.iter().enumerate() {
-            for (x2, y2) in points[i+1..].iter() {
-                let greater_x = cmp::max(x1, x2);
-                let smaller_x = cmp::min(x1, x2);
-                let x_diff = greater_x - smaller_x;
-                let greater_y = cmp::max(y1, y2);
-                let smaller_y = cmp::min(y1, y2);
-                let y_diff = greater_y - smaller_y;
-
-                // point 1
-                {
-                    if x1 == greater_x {
-                        let new_x = add(*x1, x_diff, length, 1);
-                        if y1 == greater_y {
-                            let new_y = add(*y1, y_diff, height, 1);
-                            if let Some(x) = new_x {
-                                if let Some(y) = new_y {
-                                    antinodes.insert((x, y));
-                                }
-                            }
-                        } else {
-                            let new_y = y1.checked_sub(y_diff);
-                            if let Some(x) = new_x {
-                                if let Some(y) = new_y {
-                                    antinodes.insert((x, y));
-                                }
-                            }
-                        }
-                    } else {
-                        let new_x = x1.checked_sub(x_diff);
-                        if y1 == greater_y {
-                            let new_y = add(*y1, y_diff, height, 1);
-                            if let Some(x) = new_x {
-                                if let Some(y) = new_y {
-                                    antinodes.insert((x, y));
-                                }
-                            }
-                        } else {
-                            let new_y = y1.checked_sub(y_diff);
-                            if let Some(x) = new_x {
-                                if let Some(y) = new_y {
-                                    antinodes.insert((x, y));
-                                }
-                            }
-                        }
-                    }
-                }
-                // point 2
-                {
-                    if x2 == greater_x {
-                        let new_x = add(*x2, x_diff, length, 1);
-                        if y2 == greater_y {
-                            let new_y = add(*y2, y_diff, height, 1);
-                            if let Some(x) = new_x {
-                                if let Some(y) = new_y {
-                                    antinodes.insert((x, y));
-                                }
-                            }
-                        } else {
-                            let new_y = y2.checked_sub(y_diff);
-                            if let Some(x) = new_x {
-                                if let Some(y) = new_y {
-                                    antinodes.insert((x, y));
-                                }
-                            }
-                        }
-                    } else {
-                        let new_x = x2.checked_sub(x_diff);
-                        if y2 == greater_y {
-                            let new_y = add(*y2, y_diff, height, 1);
-                            if let Some(x) = new_x {
-                                if let Some(y) = new_y {
-                                    antinodes.insert((x, y));
-                                }
-                            }
-                        } else {
-                            let new_y = y2.checked_sub(y_diff);
-                            if let Some(x) = new_x {
-                                if let Some(y) = new_y {
-                                    antinodes.insert((x, y));
-                                }
-                            }
-                        }
-                    }
-                }
-
+    let mut antinodes: HashSet<(i32, i32)> = HashSet::new();
+    for points in antennas.values() {
+        for (i, p1) in points.iter().enumerate() {
+            for p2 in points[i+1..].iter() {
+                antinodes.extend(get_antinodes_pair(*p1, *p2, length.try_into().unwrap(), height.try_into().unwrap()));
             }
         }
     }
-
-
-
-
     antinodes.len()
 }
 
-fn add(c1: usize, c2: usize, max: usize, n: usize) -> Option<usize> {
-    let sum = c1+c2*n;
-    if sum >= max {return None;}
-    return Some(sum);
+fn get_antinodes_pair((x1, y1): (i32, i32), (x2, y2): (i32, i32), max_x: i32, max_y: i32 ) -> HashSet<(i32, i32)> {
+    let mut antinodes = HashSet::new();
+    let diff_x = x2 - x1;
+    let diff_y = y2 - y1;
+    let mut new_x = x1+diff_x;
+    let mut new_y = y1+diff_y;
+    if valid(new_x, new_y, max_x, max_y, x2, y2) {
+        antinodes.insert((new_x, new_y));
+    }
+    new_x = x1-diff_x;
+    new_y = y1-diff_y;
+    if valid(new_x, new_y, max_x, max_y, x2, y2)  {
+        antinodes.insert((new_x, new_y));
+    }
+    new_x = x2+diff_x;
+    new_y = y2+diff_y;
+    if valid(new_x, new_y, max_x, max_y, x1, y1)  {
+        antinodes.insert((new_x, new_y));
+    }
+    new_x = x2-diff_x;
+    new_y = y2-diff_y;
+    if valid(new_x, new_y, max_x, max_y, x1, y1)  {
+        antinodes.insert((new_x, new_y));
+    }
+    antinodes
+}
+
+fn valid(new_x:i32, new_y:i32, max_x:i32, max_y:i32, x:i32, y:i32) -> bool {
+    new_x>=0 && new_x<max_x && new_y>=0 && new_y<max_y && new_x!=x && new_y!=y
 }
 
 /// correct answer is 1017
 pub fn part2() -> usize {
-    
     let input = read_to_string("src/in/dec08.in").unwrap();
     let map: Vec<&str>  = input.lines().collect();
-    let height = map.len();
-    let length = map[0].len();
-    let mut antennas: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
+    let height: usize = map.len();
+    let length: usize = map[0].len();
+    let mut antennas: HashMap<char, Vec<(i32, i32)>> = HashMap::new();
     for y in 0..height {
         for x in 0..length {
             let c: char = map[y].chars().nth(x).unwrap();
             if c != '.' {
                 let seen = antennas.get_mut(&c);
                 if let Some(s) = seen {
-                    s.push((x, y));
+                    s.push((x.try_into().unwrap(), y.try_into().unwrap()));
                 } else {
-                    antennas.insert(c, vec!( (x, y)));
+                    antennas.insert(c, vec!( (x.try_into().unwrap(), y.try_into().unwrap())));
                 }
             }
         }
     }
-    let mut antinodes: HashSet<(usize, usize)> = HashSet::new();
-    for (symbol, points) in antennas {
-        println!("{:?}", (symbol, &points));
-        for (i, (x1, y1)) in points.iter().enumerate() {
-            for (x2, y2) in points[i+1..].iter() {
-                antinodes.insert((*x1, *y1));
-                antinodes.insert((*x2, *y2));
-                let greater_x = cmp::max(x1, x2);
-                let smaller_x = cmp::min(x1, x2);
-                let x_diff = greater_x - smaller_x;
-                let greater_y = cmp::max(y1, y2);
-                let smaller_y = cmp::min(y1, y2);
-                let y_diff = greater_y - smaller_y;
-
-                // point 1
-                {
-                    if x1 == greater_x {
-                        let mut inside_map = true;
-                        let mut m = 1;
-                        while inside_map {
-                            let new_x = add(*x1, x_diff, length, m);
-                            if let Some(x) = new_x {
-                                if y1 == greater_y {
-                                    let new_y = add(*y1, y_diff, height, m);
-                                        if let Some(y) = new_y {
-                                            antinodes.insert((x, y));
-                                        } else {
-                                            inside_map = false;
-                                        }
-                                } else {
-                                    let new_y = y1.checked_sub(y_diff*m);
-                                    if let Some(y) = new_y {
-                                            antinodes.insert((x, y));
-                                        } else {
-                                            inside_map = false;
-                                        }
-                                    }
-                            } else {
-                                inside_map=false;
-                            }
-                            m+=1;
-                        }
-                    } else {
-                        let mut inside_map = true;
-                        let mut m = 1;
-                        while inside_map {
-                            let new_x = x1.checked_sub(x_diff*m);
-                            if let Some(x) = new_x {
-                                if y1 == greater_y {
-                                    let new_y = add(*y1, y_diff, height, m);
-                                        if let Some(y) = new_y {
-                                            antinodes.insert((x, y));
-                                        } else {
-                                            inside_map = false;
-                                        }
-                                } else {
-                                    let new_y = y1.checked_sub(y_diff*m);
-                                        if let Some(y) = new_y {
-                                            antinodes.insert((x, y));
-                                        } else {
-                                            inside_map = false;
-                                        }
-                                }
-                            } else {
-                                inside_map = false;
-                            }
-                            m+=1;
-                        }
-                    }
-                }
-                // point 2
-                {
-                    if x2 == greater_x {
-                        let mut inside_map = true;
-                        let mut m = 1;
-                        while inside_map {
-                            let new_x = add(*x2, x_diff, length, m);
-                            if let Some(x) = new_x {
-                                if y2 == greater_y {
-                                    let new_y = add(*y2, y_diff, height, m);
-                                        if let Some(y) = new_y {
-                                            antinodes.insert((x, y));
-                                        } else {
-                                            inside_map = false;
-                                        }
-                                } else {
-                                    let new_y = y2.checked_sub(y_diff*m);
-                                        if let Some(y) = new_y {
-                                            antinodes.insert((x, y));
-                                        } else {
-                                            inside_map = false;
-                                        }
-                                }
-                            } else {
-                                inside_map = false;
-                            }
-                            m+=1;
-                        }
-                    } else {
-                        let mut inside_map = true;
-                        let mut m = 1;
-                        while inside_map {
-                            let new_x = x2.checked_sub(x_diff*m);
-                            if let Some(x) = new_x {
-                                if y2 == greater_y {
-                                    let new_y = add(*y2, y_diff, height, m);
-                                        if let Some(y) = new_y {
-                                            antinodes.insert((x, y));
-                                        } else {
-                                            inside_map = false;
-                                        }
-                                } else {
-                                    let new_y = y2.checked_sub(y_diff*m);
-                                        if let Some(y) = new_y {
-                                            antinodes.insert((x, y));
-                                        } else {
-                                            inside_map = false;
-                                        }
-                                }
-                            } else {
-                                inside_map = false;
-                            }
-                            m+=1;
-                        }
-                    }
-                }
-
+    let mut antinodes: HashSet<(i32, i32)> = HashSet::new();
+    for points in antennas.values() {
+        for (i, p1) in points.iter().enumerate() {
+            for p2 in points[i+1..].iter() {
+                antinodes.extend(get_antinodes_array(*p1, *p2, length.try_into().unwrap(), height.try_into().unwrap()));
             }
         }
     }
 
-
-
-    for node in &antinodes {
-        println!("{:?}", node);
-    }
-    for i in 0..height {
-        for j in 0..length {
-            if let Some(v) = antinodes.get(&(j, i)) {
-                print!("T");
-            } else {
-                print!(".")
-            }
-        }
-        print!("\n");
-    }
     antinodes.len()
 
+}
+
+fn get_antinodes_array((x1, y1): (i32, i32), (x2, y2): (i32, i32), max_x: i32, max_y: i32 ) -> HashSet<(i32, i32)> {
+    let mut antinodes = HashSet::new();
+    let diff_x = x2 - x1;
+    let diff_y = y2 - y1;
+
+    let mut x = x1;
+    let mut y = y1;
+    loop {
+        antinodes.insert((x, y));
+        x = x + diff_x;
+        y = y + diff_y;
+        if x<0 || x>=max_x || y< 0 || y>=max_y  {
+            break
+        }
+    }
+    x = x1;
+    y = y1;
+    loop {
+        antinodes.insert((x, y));
+        x = x - diff_x;
+        y = y - diff_y;
+        if x<0 || x>=max_x || y< 0 || y>=max_y  {
+            break
+        }
+    }
+    antinodes
 }
