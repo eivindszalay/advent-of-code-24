@@ -8,6 +8,7 @@ mod dec05;
 mod dec06;
 mod dec07;
 mod dec08;
+mod dec09;
 
 fn main() {
     
@@ -27,7 +28,9 @@ fn main() {
         dec07::part1,
         dec07::part2,
         dec08::part1,
-        dec08::part2
+        dec08::part2,
+        dec09::part1,
+        dec09::part2,
         ].to_vec();
 
     let args: Vec<String> = args().collect();
@@ -51,7 +54,8 @@ fn main() {
             execute_function(*fun, index/2+1, index%2+1);
         }
     }
-    println!("total execution time was {:?}", before.elapsed())
+    println!("total execution time was {:?}", before.elapsed());
+    print!("\x07");
 }
 
 fn execute_function(fun: fn() -> usize, day: usize, part: usize) {
