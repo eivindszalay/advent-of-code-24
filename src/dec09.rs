@@ -50,6 +50,13 @@ pub fn part1() -> usize {
     }
     sum
 }
+
+struct File {
+    id: usize,
+    starting_pos: usize, 
+    size: usize,
+}
+
 // correct answer is 6321896265143
 pub fn part2() -> usize {
     let disk_map: Vec<usize> = read_to_string("src/in/dec09.in")
@@ -57,46 +64,48 @@ pub fn part2() -> usize {
         .chars()
         .filter_map(|c| c.to_digit(10).map(|d| d as usize))
         .collect();
-    let mut files: Vec<(usize, usize, usize)> = vec!();
+    let mut files: Vec<File> = vec!();
     let mut free: Vec<(usize, usize)> = vec!();
     let mut curr_position = 0;
     for (i, size) in disk_map.iter().enumerate() {
         if i%2==0 {
-            files.push(((i/2),curr_position, *size));
+            files.push(File{id: (i/2), starting_pos: curr_position, size:*size});
         } else {
             free.push(( curr_position,  *size));
         }
         curr_position += size;
     }
     let mut sum = 0;
-    loop {
-        if let Some((file_id, file_starting_pos, file_size)) = files.pop() {
-            let mut free_space = (false, 0, 0, 0);
-            
-            for (i, (pos, size)) in free.iter().enumerate() {
-                if *pos>=file_starting_pos {
-                    break;
-                }
-                if *size>=file_size {
-                    free_space = (true, i, *pos, *size);
-                    break;
-                }
-            }
+    while !files.is_empty() {
+        let file = files.pop().unwrap();
 
-            if free_space.0 {
-                let space_left = free_space.3-file_size;
-                free[free_space.1] = (free_space.2+file_size, space_left);
-                for i in 0..file_size {
-                    sum += file_id*(free_space.2+i);
-                }
-            } else {
-                for i in 0..file_size {
-                    sum += file_id*(file_starting_pos+i);
-                }
+        let mut free_space = (false, 0, 0, 0);
+        for (i, (pos, size)) in free.iter().enumerate() {
+            if *pos>=file.starting_pos {
+                break;
             }
-        } else {
-            return sum;
+            if *size>=file.size {
+                free_space = (true, i, *pos, *size);
+                break;
+            }
         }
 
+        if free_space.0 {
+            let space_left = free_space.3-file.size;
+            free[free_space.1] = (free_space.2+file.size, space_left);
+            sum += calculate_file(file);
+        } else {
+            sum += calculate_file(file);
+        }
+
+    }
+    return sum;
+
+    fn calculate_file(file: File) -> usize {
+        let mut sum = 0;
+        for i in 0..file.size {
+            sum += file.id*(file.starting_pos+i);
+        }
+        sum
     }
 }
