@@ -69,34 +69,31 @@ pub fn part2() -> usize {
         curr_position += size;
     }
     let mut sum = 0;
-    loop {
-        if let Some((file_id, file_starting_pos, file_size)) = files.pop() {
-            let mut free_space = (false, 0, 0, 0);
-            
-            for (i, (pos, size)) in free.iter().enumerate() {
-                if *pos>=file_starting_pos {
-                    break;
-                }
-                if *size>=file_size {
-                    free_space = (true, i, *pos, *size);
-                    break;
-                }
+    while !files.is_empty() {
+        let (file_id, file_starting_pos, file_size) = files.pop().unwrap();
+        let mut free_space = (false, 0, 0, 0);
+        
+        for (i, (pos, size)) in free.iter().enumerate() {
+            if *pos>=file_starting_pos {
+                break;
             }
-
-            if free_space.0 {
-                let space_left = free_space.3-file_size;
-                free[free_space.1] = (free_space.2+file_size, space_left);
-                for i in 0..file_size {
-                    sum += file_id*(free_space.2+i);
-                }
-            } else {
-                for i in 0..file_size {
-                    sum += file_id*(file_starting_pos+i);
-                }
+            if *size>=file_size {
+                free_space = (true, i, *pos, *size);
+                break;
             }
-        } else {
-            return sum;
         }
 
+        if free_space.0 {
+            let space_left = free_space.3-file_size;
+            free[free_space.1] = (free_space.2+file_size, space_left);
+            for i in 0..file_size {
+                sum += file_id*(free_space.2+i);
+            }
+        } else {
+            for i in 0..file_size {
+                sum += file_id*(file_starting_pos+i);
+            }
+        }
     }
+    sum
 }
