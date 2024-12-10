@@ -68,5 +68,61 @@ fn walk_trail((x, y): (usize, usize), map: &Vec<String>) -> HashSet<(usize, usiz
     trail_heads
 }   
 
+/// correct answer is 928
+pub fn part2() -> usize {
+    let input: Vec<String> = read_to_string("src/in/dec10.in")
+        .unwrap()
+        .lines()
+        .map(str::to_string)
+        .collect();
+    let height = input.len();
+    let length = input[0].len();
+    let mut trail_head_scores: HashMap<(usize, usize), usize> = HashMap::new();
+    for y in 0..height {
+        for x in 0..length {
+            if input[y].chars().nth(x).unwrap() == '0' {
+                let score = walk_trail_2((x, y), &input);
+                trail_head_scores.insert((x, y), score);
+            }
+        }
+    }
 
-pub fn part2() -> usize {0}
+    trail_head_scores.values().sum()
+}
+
+
+fn walk_trail_2((x, y): (usize, usize), map: &Vec<String>) -> usize {
+    let height = map.len();
+    let length = map[0].len();
+    let current_alt = map[y].chars().nth(x).unwrap().to_string().parse::<usize>().unwrap();
+    let mut sum=0;
+    if current_alt==9 {
+        return 1;
+    }
+    if x+1<length {
+        let new_alt = map[y].chars().nth(x+1).unwrap().to_string().parse::<usize>().unwrap();
+        if current_alt+1 == new_alt {
+            sum += walk_trail_2((x+1, y), &map);
+        }
+    }
+    if y+1<height {
+        let new_alt = map[y+1].chars().nth(x).unwrap().to_string().parse::<usize>().unwrap();
+        if current_alt+1 == new_alt {
+            sum += walk_trail_2((x, y+1), &map);
+        }
+    }
+    if let Some(decrement_x) = x.checked_sub(1) {
+        let new_alt = map[y].chars().nth(decrement_x).unwrap().to_string().parse::<usize>().unwrap();
+        if current_alt+1 == new_alt {
+            sum += walk_trail_2((decrement_x, y), &map);
+        }
+    }
+    if let Some(decrement_y) = y.checked_sub(1) {
+        let new_alt = map[decrement_y].chars().nth(x).unwrap().to_string().parse::<usize>().unwrap();
+        if current_alt+1 == new_alt {
+            sum += walk_trail_2((x, decrement_y), &map);
+        }
+    }
+
+    sum
+}   
