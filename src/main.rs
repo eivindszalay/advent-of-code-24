@@ -10,6 +10,7 @@ mod dec07;
 mod dec08;
 mod dec09;
 mod dec10;
+mod dec11;
 
 fn main() {
     
@@ -34,6 +35,8 @@ fn main() {
         dec09::part2,
         dec10::part1,
         dec10::part2,
+        dec11::part1,
+        dec11::part2,
         ].to_vec();
 
     let args: Vec<String> = args().collect();
