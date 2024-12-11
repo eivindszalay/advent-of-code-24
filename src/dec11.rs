@@ -32,7 +32,7 @@ fn calculate(n: u128, depth: u8, calculated: &mut HashMap<(u128, u8), usize>) ->
     if let Some(res) = calculated.get(&(n, depth)) {
        return *res;
     }
-    let mut sum = 0;
+    let sum;
     if depth == 0 {
         sum = 1;
     } else if n == 0 {
