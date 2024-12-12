@@ -15,7 +15,6 @@ pub fn part1() -> usize {
         for x in 0..map[0].len() {
             if !visited_regions.contains(&(x, y)) {
                 let (area, perimeter, visited) = expand((x,y), &map);
-                dbg!(area, perimeter);
                 sum += area*perimeter;
                 visited_regions.extend(visited);
             }
@@ -79,7 +78,6 @@ pub fn part2() -> usize {
         for x in 0..map[0].len() {
             if !visited_regions.contains(&(x, y)) {
                 let (area, corners, visited) = expand_2((x,y), &map);
-                dbg!(area, corners);
                 sum += area*corners;
                 visited_regions.extend(visited);
             }
