@@ -1,5 +1,6 @@
 use std::{collections::HashSet, fs::read_to_string};
 
+/// correct answer is 1359028
 pub fn part1() -> usize {
     let map: Vec<Vec<char>> = read_to_string("src/in/dec12.in")
         .unwrap()
@@ -63,6 +64,8 @@ fn expand(start: (usize, usize), map: &Vec<Vec<char>>) -> (usize, usize, HashSet
     }
     (area, perimeter, visited_points)
 }
+
+/// correct answer is 839780
 pub fn part2() -> usize {
     let map: Vec<Vec<char>> = read_to_string("src/in/dec12.in")
         .unwrap()
