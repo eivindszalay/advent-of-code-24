@@ -6,7 +6,7 @@ type Equation = ((f64, f64, f64), (f64, f64, f64));
 /// correct answer is 31897
 pub fn part1() -> usize {
     let mut cost = 0;
-    for (i, eq) in get_equations(false).iter().enumerate() {
+    for eq in get_equations(false).iter() {
         if let Some((a, b)) = get_solution(*eq) {
             cost += a*3+b;
         }
@@ -17,7 +17,7 @@ pub fn part1() -> usize {
 /// correct answer is 87596249540359
 pub fn part2() -> usize {
     let mut cost = 0;
-    for (i, eq) in get_equations(true).iter().enumerate() {
+    for eq in get_equations(true).iter() {
         if let Some((a, b)) = get_solution(*eq) {
             cost += a*3+b;
         }
