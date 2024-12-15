@@ -1,5 +1,6 @@
 use std::{collections::HashSet, fs::read_to_string};
 
+/// correct answer is 1442192
 pub fn part1() -> usize {
     let input: String = read_to_string("src/in/dec15.in").unwrap().replace("\r\n", "\n");
     let mut map: Vec<Vec<char>> =  input
@@ -95,7 +96,7 @@ pub fn part1() -> usize {
     sum
 }
 
-
+/// correct answer is 1448458
 pub fn part2() -> usize {
     let input: String = read_to_string("src/in/dec15.in").unwrap().replace("\r\n", "\n");
     let map: Vec<Vec<char>> =  input
@@ -125,14 +126,6 @@ pub fn part2() -> usize {
             if map[i][j]=='O' {
                 expanded_map[i].push('[');
                 expanded_map[i].push(']');
-            }
-        }
-    }
-    let mut a = 0;
-    for y in  0..expanded_map.len() {
-        for x in 0..expanded_map[0].len() {
-            if expanded_map[y][x]=='.' {
-                a += 1;
             }
         }
     }
@@ -262,14 +255,6 @@ pub fn part2() -> usize {
         }
     }
     let mut sum = 0;
-    a = 0;
-    for y in  0..expanded_map.len() {
-        for x in 0..expanded_map[0].len() {
-            if expanded_map[y][x]=='.' {
-                a += 1;
-            }
-        }
-    }
     for y in  0..expanded_map.len() {
         for x in 0..expanded_map[0].len() {
             if expanded_map[y][x]=='[' {
