@@ -1,4 +1,4 @@
-use std::{fs::read_to_string, ops::BitXorAssign};
+use std::{collections::HashSet, fs::read_to_string, ops::BitXorAssign};
 
 pub fn part1() -> usize {
     let i = read_to_string("src/in/dec17.in").unwrap();
@@ -35,6 +35,58 @@ pub fn part1() -> usize {
 }
 
 pub fn part2() -> usize {
+    let i = read_to_string("src/in/dec17.in").unwrap();
+    let input = i.replace("\r\n", "\n");
+    let (r, p) = input.split_once("\n\n").unwrap();
+
+    let registers: Vec<u32> = r
+        .lines()
+        .map(|register| register.split_whitespace().last().unwrap().parse().unwrap())
+        .collect();
+    let program: Vec<u32> = p
+        .split_whitespace()
+        .last()
+        .unwrap()
+        .split(",")
+        .map(|o| o.parse().unwrap())
+        .collect();
+    let mut register_a = 0;
+    loop {
+        let mut pointer = 0;
+        let mut output: Vec<u32> = vec!();
+        let mut r = registers.clone();
+        r[0] = register_a;
+        let mut prev_states: HashSet<(usize, Vec<u32>, Vec<u32>)> = HashSet::new();
+        while pointer < program.len() {
+            if prev_states.contains(&(pointer, output.clone(), registers.clone())) {
+                break;
+            } else {
+                prev_states.insert((pointer, output.clone(), registers.clone()));
+            }
+            if !output.iter().enumerate().all(|(i, e)| program[i]==*e) {
+                break;
+            }
+            if output.len()>program.len() {
+                break;
+            }
+            match program[pointer] {
+                0 => adv(&mut r, &program, &mut pointer),
+                1 => bxl(&mut r, &program, &mut pointer),
+                2 => bst(&mut r, &program, &mut pointer),
+                3 => jnz(&mut r, &program, &mut pointer),
+                4 => bxc(&mut r, &program, &mut pointer),
+                5 => out(&mut r, &program, &mut pointer, &mut output),
+                6 => bdv(&mut r, &program, &mut pointer),
+                7 => cdv(&mut r, &program, &mut pointer),
+                _ => break
+            }
+        }
+        if output==program {
+            println!("This register value was the solution: {}", register_a);
+            break;
+        }
+        register_a += 1;
+    }
     0
 }
 
