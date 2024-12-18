@@ -1,15 +1,15 @@
-use std::{collections::HashSet, fs::read_to_string, ops::BitXorAssign};
+use std::fs::read_to_string;
 
 pub fn part1() -> usize {
     let i = read_to_string("src/in/dec17.in").unwrap();
     let input = i.replace("\r\n", "\n");
     let (r, p) = input.split_once("\n\n").unwrap();
 
-    let mut registers: Vec<u32> = r
+    let mut registers: Vec<u64> = r
         .lines()
         .map(|register| register.split_whitespace().last().unwrap().parse().unwrap())
         .collect();
-    let program: Vec<u32> = p
+    let program: Vec<u64> = p
         .split_whitespace()
         .last()
         .unwrap()
@@ -17,7 +17,7 @@ pub fn part1() -> usize {
         .map(|o| o.parse().unwrap())
         .collect();
     let mut pointer = 0;
-    let mut output: Vec<u32> = vec!();
+    let mut output: Vec<u64> = vec!();
     while pointer < program.len() {
         match program[pointer] {
             0 => adv(&mut registers, &program, &mut pointer),
@@ -39,75 +39,145 @@ pub fn part2() -> usize {
     let input = i.replace("\r\n", "\n");
     let (r, p) = input.split_once("\n\n").unwrap();
 
-    let registers: Vec<u32> = r
+    let mut registers: Vec<u64> = r
         .lines()
         .map(|register| register.split_whitespace().last().unwrap().parse().unwrap())
         .collect();
-    let program: Vec<u32> = p
+    let program: Vec<u64> = p // kan denne typen endres? disse tallene er aldri høyere enn 7
         .split_whitespace()
         .last()
         .unwrap()
         .split(",")
         .map(|o| o.parse().unwrap())
         .collect();
-    let mut register_a = 0;
-    loop {
-        let mut pointer = 0;
-        let mut output: Vec<u32> = vec!();
-        let mut r = registers.clone();
-        r[0] = register_a;
-        let mut prev_states: HashSet<(usize, Vec<u32>, Vec<u32>)> = HashSet::new();
-        while pointer < program.len() {
-            if prev_states.contains(&(pointer, output.clone(), registers.clone())) {
-                break;
-            } else {
-                prev_states.insert((pointer, output.clone(), registers.clone()));
-            }
-            if !output.iter().enumerate().all(|(i, e)| program[i]==*e) {
-                break;
-            }
-            if output.len()>program.len() {
-                break;
-            }
-            match program[pointer] {
-                0 => adv(&mut r, &program, &mut pointer),
-                1 => bxl(&mut r, &program, &mut pointer),
-                2 => bst(&mut r, &program, &mut pointer),
-                3 => jnz(&mut r, &program, &mut pointer),
-                4 => bxc(&mut r, &program, &mut pointer),
-                5 => out(&mut r, &program, &mut pointer, &mut output),
-                6 => bdv(&mut r, &program, &mut pointer),
-                7 => cdv(&mut r, &program, &mut pointer),
-                _ => break
+    registers[0] = 247839571658938;
+    dbg!(get_output(&registers, &program));
+
+
+
+
+
+
+
+
+
+
+    registers[0] = 7;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 7, output);
+    registers[0] = 56;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 56, output);
+    registers[0] = 450;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 450, output);
+    registers[0] = 3606;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 3606, output);
+    registers[0] = 28852;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 28852, output);
+    registers[0] = 230818;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 230818, output);
+    registers[0] = 1846548;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 1846548, output);
+    registers[0] = 14772389;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 14772389, output);
+    registers[0] = 118179114;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 118179114, output);
+    registers[0] = 945432931;
+    let output = get_output(&registers, &program);
+    println!("reg_a: {}, output: {:?}", 945432931, output);
+    registers[0] = 7563463490;
+    let output = get_output(&registers, &program);
+    // println!("reg_a: {}, output: {:?}", 7563463490, output);
+    // registers[0] = 60507707920;
+    // let output = get_output(&registers, &program);
+    // println!("reg_a: {}, output: {:?}", 60507707920, output);
+    // registers[0] = 484061663394;
+    // let output = get_output(&registers, &program);
+    // println!("reg_a: {}, output: {:?}", 484061663394, output);
+    // registers[0] = 3872493307170;
+    // let output = get_output(&registers, &program);
+    // println!("reg_a: {}, output: {:?}", 3872493307170, output);
+    // registers[0] = 30979946457367;
+    // let output = get_output(&registers, &program);
+    // println!("reg_a: {}, output: {:?}", 30979946457367, output);
+    // registers[0] = 247839571658938;
+    // let output = get_output(&registers, &program);
+    // println!("reg_a: {}, output: {:?}", 247839571658938, output);
+
+
+    let mut copy = program.clone();
+    copy.reverse();
+    let mut index = 0;
+    registers[0] = index;
+    let mut important_indices: Vec<u64> = vec!();
+    for (i, code) in copy.iter().enumerate() {
+        let mut output = get_output(&registers, &program);
+        let mut ii = 0;
+        while output[0] != *code {
+            registers[0] = index + ii;
+            output = get_output(&registers, &program);
+            if output[0] != *code {
+                ii += 1;
             }
         }
-        if output==program {
-            println!("This register value was the solution: {}", register_a);
-            break;
+        println!("found with reg_a: {}", index+ii);
+        important_indices.push(ii);
+        index = 0;
+        for (iii, e) in important_indices.iter().enumerate() {
+            index += 8_u64.pow((i-iii+1) as u32)*e;
         }
-        register_a += 1;
-    }
+
+        registers[0] = index;
+    };
+
     0
 }
 
-fn adv(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize ) {
+fn get_output(registers: &Vec<u64>, program: &Vec<u64>) -> Vec<u64> {
+    let mut pointer = 0;
+    let mut output: Vec<u64> = vec!();
+    let mut r = registers.clone();
+    while pointer < program.len() {
+        match program[pointer] {
+            0 => adv(&mut r, &program, &mut pointer),
+            1 => bxl(&mut r, &program, &mut pointer),
+            2 => bst(&mut r, &program, &mut pointer),
+            3 => jnz(&mut r, &program, &mut pointer),
+            4 => bxc(&mut r, &program, &mut pointer),
+            5 => out(&mut r, &program, &mut pointer, &mut output),
+            6 => bdv(&mut r, &program, &mut pointer),
+            7 => cdv(&mut r, &program, &mut pointer),
+            _ => break
+        }
+    }
+    output
+}
+
+fn adv(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
     let numerator = registers[0];
-    let denominator: u32;
+    let denominator: u64;
     let operand = program[*pointer+1];
     if operand < 4 {
-        denominator = 2_u32.pow(operand);
+        denominator = 2_u64.pow(operand as u32);
     } else {
-        denominator = 2_u32.pow(registers[(operand%4) as usize]);
+        denominator = 2_u64.pow((registers[(operand%4) as usize]).try_into().unwrap());
     }
     registers[0] = numerator / denominator;
     *pointer += 2;
 }
 
-fn bxl(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize ) {
+fn bxl(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
     registers[1] = registers[1] ^ program[*pointer+1];
     *pointer += 2;
 }
-fn bst(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize ) {
+fn bst(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
     let operand = program[*pointer+1];
     if operand < 4 {
         registers[1] = operand % 8;
@@ -116,18 +186,18 @@ fn bst(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize ) {
     } 
     *pointer += 2;
 }
-fn jnz(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize ) {
+fn jnz(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
     if registers[0] == 0 { 
         *pointer += 2;
         return; 
     }
     *pointer = program[*pointer+1] as usize;
 }
-fn bxc(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize ) {
+fn bxc(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
     registers[1] = registers[1] ^ registers[2];
     *pointer += 2;
 }
-fn out(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize, output: &mut Vec<u32>) {
+fn out(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize, output: &mut Vec<u64>) {
     let operand = program[*pointer+1];
     if operand < 4 {
         output.push(operand % 8);
@@ -136,27 +206,27 @@ fn out(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize, output
     }
     *pointer += 2;
 }
-fn bdv(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize ) {
+fn bdv(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
     let numerator = registers[0];
-    let denominator: u32;
+    let denominator: u64;
     let operand = program[*pointer+1];
     if operand < 4 {
-        denominator = 2_u32.pow(operand);
+        denominator = 2_u64.pow(operand as u32);
     } else {
-        denominator = 2_u32.pow(registers[(operand%4) as usize]);
+        denominator = 2_u64.pow(registers[(operand%4) as usize].try_into().unwrap());
 
     }
     registers[1] = numerator / denominator;
     *pointer += 2;
 }
-fn cdv(registers: &mut Vec<u32>, program: &Vec<u32>, pointer: &mut usize ) {
+fn cdv(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
     let numerator = registers[0];
-    let denominator: u32;
+    let denominator: u64;
     let operand = program[*pointer+1];
     if operand < 4 {
-        denominator = 2_u32.pow(operand);
+        denominator = 2_u64.pow(operand as u32);
     } else {
-        denominator = 2_u32.pow(registers[(operand%4) as usize]);
+        denominator = 2_u64.pow(registers[(operand%4) as usize].try_into().unwrap());
 
     }
     registers[2] = numerator / denominator;
