@@ -1,5 +1,6 @@
 use std::fs::read_to_string;
 
+/// correct answer is '1,6,3,6,5,6,5,1,7'
 pub fn part1() -> usize {
     let i = read_to_string("src/in/dec17.in").unwrap();
     let input = i.replace("\r\n", "\n");
@@ -34,6 +35,7 @@ pub fn part1() -> usize {
     0
 }
 
+/// correct answer is 247839653009594
 pub fn part2() -> usize {
     let i = read_to_string("src/in/dec17.in").unwrap();
     let input = i.replace("\r\n", "\n");
@@ -50,94 +52,34 @@ pub fn part2() -> usize {
         .split(",")
         .map(|o| o.parse().unwrap())
         .collect();
-    registers[0] = 247839571658938;
-    dbg!(get_output(&registers, &program));
-
-
-
-
-
-
-
-
-
-
-    registers[0] = 7;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 7, output);
-    registers[0] = 56;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 56, output);
-    registers[0] = 450;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 450, output);
-    registers[0] = 3606;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 3606, output);
-    registers[0] = 28852;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 28852, output);
-    registers[0] = 230818;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 230818, output);
-    registers[0] = 1846548;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 1846548, output);
-    registers[0] = 14772389;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 14772389, output);
-    registers[0] = 118179114;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 118179114, output);
-    registers[0] = 945432931;
-    let output = get_output(&registers, &program);
-    println!("reg_a: {}, output: {:?}", 945432931, output);
-    registers[0] = 7563463490;
-    let output = get_output(&registers, &program);
-    // println!("reg_a: {}, output: {:?}", 7563463490, output);
-    // registers[0] = 60507707920;
-    // let output = get_output(&registers, &program);
-    // println!("reg_a: {}, output: {:?}", 60507707920, output);
-    // registers[0] = 484061663394;
-    // let output = get_output(&registers, &program);
-    // println!("reg_a: {}, output: {:?}", 484061663394, output);
-    // registers[0] = 3872493307170;
-    // let output = get_output(&registers, &program);
-    // println!("reg_a: {}, output: {:?}", 3872493307170, output);
-    // registers[0] = 30979946457367;
-    // let output = get_output(&registers, &program);
-    // println!("reg_a: {}, output: {:?}", 30979946457367, output);
-    // registers[0] = 247839571658938;
-    // let output = get_output(&registers, &program);
-    // println!("reg_a: {}, output: {:?}", 247839571658938, output);
-
 
     let mut copy = program.clone();
     copy.reverse();
-    let mut index = 0;
-    registers[0] = index;
-    let mut important_indices: Vec<u64> = vec!();
-    for (i, code) in copy.iter().enumerate() {
-        let mut output = get_output(&registers, &program);
-        let mut ii = 0;
-        while output[0] != *code {
-            registers[0] = index + ii;
-            output = get_output(&registers, &program);
-            if output[0] != *code {
-                ii += 1;
-            }
-        }
-        println!("found with reg_a: {}", index+ii);
-        important_indices.push(ii);
-        index = 0;
-        for (iii, e) in important_indices.iter().enumerate() {
-            index += 8_u64.pow((i-iii+1) as u32)*e;
-        }
 
-        registers[0] = index;
+    let mut correct_reg_a_values: Vec<u64> = vec!(0);
+    
+    for code in copy.iter() {
+
+        let mut found_reg_a_values : Vec<u64> = vec!();
+        for reg_a in correct_reg_a_values.iter() {
+
+          let mut index = 0;
+          while index < 8 {
+              let check = 8*reg_a + index;
+              registers[0] = check;
+
+              if get_output(&registers, &program)[0] == *code {
+                found_reg_a_values.push(check);
+              }
+              
+              index += 1;
+          }
+        }
+        correct_reg_a_values = found_reg_a_values;
+
     };
 
-    0
+    return correct_reg_a_values[0].try_into().unwrap();
 }
 
 fn get_output(registers: &Vec<u64>, program: &Vec<u64>) -> Vec<u64> {
