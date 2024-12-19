@@ -61,18 +61,16 @@ fn get_input() -> (Rules, Vec<Vec<usize>>) {
     let input = read_to_string("src/in/dec05.in");
     match input {
         Ok(i) => {
-            let rules = i
-            .split("\n\n")
-            .nth(0)
-            .unwrap()
-            .lines()
-            .map(|rule| parse_as_rule(rule))
-            .collect();
+            let input = i.replace("\r\n", "\n");
 
-            let updates: Vec<Vec<usize>> = i
-                .split("\n\n")
-                .nth(1)
-                .unwrap()
+            let (rules_part, updates_part) = input.split_once("\n\n").unwrap();
+
+            let rules = rules_part
+                .lines()
+                .map(|rule| parse_as_rule(rule))
+                .collect();
+
+            let updates: Vec<Vec<usize>> = updates_part
                 .lines()
                 .map(|line| parse_as_update(line))
                 .collect();
