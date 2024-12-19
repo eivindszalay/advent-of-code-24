@@ -53,33 +53,27 @@ pub fn part2() -> usize {
         .map(|o| o.parse().unwrap())
         .collect();
 
-    let mut copy = program.clone();
-    copy.reverse();
-
-    let mut correct_reg_a_values: Vec<u64> = vec!(0);
+    let mut reg_a_values: Vec<u64> = vec!(0);
     
-    for code in copy.iter() {
+    for code in program.iter().rev() {
 
-        let mut found_reg_a_values : Vec<u64> = vec!();
-        for reg_a in correct_reg_a_values.iter() {
+        let mut found_reg_a_values: Vec<u64> = vec!();
+        for reg_a in reg_a_values.iter() {
 
-          let mut index = 0;
-          while index < 8 {
+          for index in 0..8 {
               let check = 8*reg_a + index;
               registers[0] = check;
 
               if get_output(&registers, &program)[0] == *code {
                 found_reg_a_values.push(check);
               }
-              
-              index += 1;
           }
         }
-        correct_reg_a_values = found_reg_a_values;
+        reg_a_values = found_reg_a_values;
 
     };
 
-    return correct_reg_a_values[0].try_into().unwrap();
+    return reg_a_values[0].try_into().unwrap();
 }
 
 fn get_output(registers: &Vec<u64>, program: &Vec<u64>) -> Vec<u64> {
