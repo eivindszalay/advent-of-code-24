@@ -77,28 +77,28 @@ pub fn part2() -> usize {
     }
     let mut sum = 0;
     while !files.is_empty() {
-        let (file_id, file_starting_pos, file_size) = files.pop().unwrap();
+        let file = files.pop().unwrap();
         let mut free_space = (false, 0, 0, 0);
         
         for (i, (pos, size)) in free.iter().enumerate() {
-            if *pos>=file_starting_pos {
+            if *pos>=file.starting_pos {
                 break;
             }
-            if *size>=file_size {
+            if *size>=file.size {
                 free_space = (true, i, *pos, *size);
                 break;
             }
         }
 
         if free_space.0 {
-            let space_left = free_space.3-file_size;
-            free[free_space.1] = (free_space.2+file_size, space_left);
-            for i in 0..file_size {
-                sum += file_id*(free_space.2+i);
+            let space_left = free_space.3-file.size;
+            free[free_space.1] = (free_space.2+file.size, space_left);
+            for i in 0..file.size {
+                sum += file.id*(free_space.2+i);
             }
         } else {
-            for i in 0..file_size {
-                sum += file_id*(file_starting_pos+i);
+            for i in 0..file.size {
+                sum += file.id*(file.starting_pos+i);
             }
         }
     }
