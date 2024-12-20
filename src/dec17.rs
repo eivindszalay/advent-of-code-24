@@ -25,7 +25,7 @@ pub fn part1() -> usize {
             1 => bxl(&mut registers, &program, &mut pointer),
             2 => bst(&mut registers, &program, &mut pointer),
             3 => jnz(&mut registers, &program, &mut pointer),
-            4 => bxc(&mut registers, &program, &mut pointer),
+            4 => bxc(&mut registers, &mut pointer),
             5 => out(&mut registers, &program, &mut pointer, &mut output),
             6 => bdv(&mut registers, &program, &mut pointer),
             7 => cdv(&mut registers, &program, &mut pointer),
@@ -86,7 +86,7 @@ fn get_output(registers: &Vec<u64>, program: &Vec<u64>) -> Vec<u64> {
             1 => bxl(&mut r, &program, &mut pointer),
             2 => bst(&mut r, &program, &mut pointer),
             3 => jnz(&mut r, &program, &mut pointer),
-            4 => bxc(&mut r, &program, &mut pointer),
+            4 => bxc(&mut r, &mut pointer),
             5 => out(&mut r, &program, &mut pointer, &mut output),
             6 => bdv(&mut r, &program, &mut pointer),
             7 => cdv(&mut r, &program, &mut pointer),
@@ -129,7 +129,7 @@ fn jnz(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
     }
     *pointer = program[*pointer+1] as usize;
 }
-fn bxc(registers: &mut Vec<u64>, program: &Vec<u64>, pointer: &mut usize ) {
+fn bxc(registers: &mut Vec<u64>, pointer: &mut usize ) {
     registers[1] = registers[1] ^ registers[2];
     *pointer += 2;
 }
